@@ -1,12 +1,15 @@
 {
   "name": "api",
-  
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    
+    "vercel-build": "echo 'Vercel build completed'",
+    "vercel-install": "npm ci --production",
+    "vercel-deploy": "vercel deploy"
   },
   "keywords": [],
   "author": "",
