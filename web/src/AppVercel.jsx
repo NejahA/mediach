@@ -3,7 +3,7 @@ import axios from 'axios';
 import {
   Download, Link as LinkIcon, Loader2, Play, Video, Music, X, Sparkles,
   Monitor, FileAudio, FileVideo, CheckCircle2, AlertTriangle,
-  Compass, Shield, Flame, PlayCircle, Server
+  Compass, Shield, Flame, PlayCircle, Server, Layers
 } from 'lucide-react';
 
 const VERCEL_API_BASE = 'https://mediach-one.vercel.app';
@@ -138,59 +138,71 @@ function AppVercel({ onSwitch }) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white w-full p-4 md:p-8 flex flex-col items-center relative overflow-hidden">
-      {/* Animated Glowing Nebula Background */}
+    <div className="min-h-screen bg-[#050000] text-[#f8fafc] w-full p-4 md:p-8 flex flex-col items-center relative overflow-hidden">
+      
+      {/* Hellish Animated Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] rounded-full bg-indigo-900/20 blur-[150px] animate-pulse"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] rounded-full bg-violet-900/20 blur-[150px] animate-pulse delay-1000"></div>
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#0f172a_1px,transparent_1px),linear-gradient(to_bottom,#0f172a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-30"></div>
+        {/* Deep Crimson Pit Glow */}
+        <div className="absolute top-[-15%] left-[-10%] w-[65%] h-[65%] rounded-full bg-red-950/20 blur-[150px] animate-pulse-ember"></div>
+        {/* Burning Magma Orange Glow */}
+        <div className="absolute bottom-[-15%] right-[-10%] w-[60%] h-[60%] rounded-full bg-orange-600/10 blur-[150px] animate-pulse-ember"></div>
+        {/* Dark Ash/Charcoal Smoke Area */}
+        <div className="absolute top-[30%] right-[10%] w-[45%] h-[45%] rounded-full bg-neutral-950/50 blur-[120px]"></div>
+        
+        {/* Floating Red-Orange Embers */}
+        <div className="absolute inset-0 bg-[radial-gradient(1.5px_1.5px_at_80px_100px,#ef4444_100%,transparent_0),radial-gradient(2px_2px_at_200px_350px,#f97316_100%,transparent_0),radial-gradient(1px_1px_at_120px_20px,#ef4444_100%,transparent_0),radial-gradient(2.5px_2.5px_at_280px_180px,#ea580c_80%,transparent_0)] bg-[size:450px_450px] opacity-25 animate-stars-blink"></div>
+
+        {/* Heavy grid overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#3f0f0f_0.5px,transparent_0.5px),linear-gradient(to_bottom,#3f0f0f_0.5px,transparent_0.5px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_80%,transparent_100%)] opacity-20"></div>
       </div>
 
       {/* Main Content */}
       <div className="w-full max-w-5xl flex-grow flex flex-col items-center relative z-10">
 
         {/* Toggle Version Banner */}
-        <div className="w-full flex justify-between items-center mb-6">
+        <div className="w-full flex justify-between items-center mb-10">
           <div className="flex items-center gap-2">
-            <Server className="w-4 h-4 text-violet-400" />
-            <span className="text-xs font-semibold text-slate-400">Vercel Proxy Mode</span>
+            <Server className="w-4 h-4 text-red-500 animate-pulse" />
+            <span className="text-xs font-bold uppercase tracking-wider text-red-400 drop-shadow-[0_0_8px_rgba(239,68,68,0.25)]">Vercel Proxy Mode</span>
           </div>
           <button
             onClick={onSwitch}
-            className="px-3.5 py-1.5 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 rounded-xl text-xs font-bold transition-all hover:scale-105 active:scale-95"
+            className="px-4 py-2 bg-gradient-to-r from-cyan-950/20 to-indigo-950/20 hover:from-cyan-900/30 hover:to-indigo-900/30 text-cyan-400 border border-cyan-500/25 rounded-2xl text-xs font-extrabold transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_0_15px_rgba(6,182,212,0.1)] hover:border-cyan-500/50 hover:text-cyan-300 flex items-center gap-2"
           >
-            Switch to Celestial Direct (Client-Side) &rarr;
+            <span>Ascend to Celestial Direct (Heaven Mode)</span> &rarr;
           </button>
         </div>
 
         {/* Header */}
-        <header className="mb-10 text-center w-full">
-          <div className="inline-flex items-center gap-3 px-4 py-2 bg-white/5 border border-white/10 rounded-full backdrop-blur-md mb-4 animate-fade-in">
-            <Server className="w-4 h-4 text-violet-400 animate-pulse" />
-            <span className="text-xs font-semibold tracking-wider text-violet-300 uppercase">Vercel API Gateway</span>
-            <Server className="w-4 h-4 text-violet-400 animate-pulse" />
+        <header className="mb-12 text-center w-full mt-4 flex flex-col items-center">
+          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 bg-red-950/30 border border-red-500/20 rounded-full backdrop-blur-md mb-5 shadow-[0_0_15px_rgba(239,68,68,0.08)]">
+            <Server className="w-3.5 h-3.5 text-red-500 animate-pulse" />
+            <span className="text-[10px] font-extrabold tracking-widest text-red-400 uppercase">🔥 Vercel API Gateway 🔥</span>
+            <Server className="w-3.5 h-3.5 text-orange-500 animate-pulse" />
           </div>
-          <h1 className="text-5xl md:text-7xl font-black mb-3 bg-gradient-to-r from-violet-400 via-indigo-300 to-cyan-400 bg-clip-text text-transparent tracking-tight leading-none drop-shadow-sm">
+          <h1 className="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-red-600 via-orange-400 to-red-500 bg-clip-text text-transparent tracking-tight leading-none drop-shadow-[0_0_30px_rgba(239,68,68,0.25)]">
             Mediach Vercel
           </h1>
-          <p className="text-slate-400 text-lg font-light max-w-lg mx-auto">
+          <p className="text-slate-400 text-base md:text-lg font-light max-w-lg mx-auto tracking-wide leading-relaxed">
             Media downloader powered by Vercel serverless functions and Cobalt redirection.
           </p>
         </header>
 
         {/* Search Panel */}
         <div className="w-full max-w-3xl mb-8">
-          <div className="bg-slate-900/60 border border-slate-800 rounded-3xl p-5 md:p-6 backdrop-blur-xl shadow-2xl relative group">
-            <div className="absolute inset-[-1px] rounded-3xl bg-gradient-to-r from-violet-500/30 to-cyan-500/30 opacity-0 group-focus-within:opacity-100 transition-opacity duration-500 pointer-events-none z-0"></div>
+          <div className="bg-[#0e0202]/60 border border-red-500/10 rounded-3xl p-5 md:p-6 backdrop-blur-xl shadow-[0_0_50px_rgba(239,68,68,0.05)] relative group">
+            
+            {/* Glowing border ring on focus */}
+            <div className="absolute inset-[-1px] rounded-3xl bg-gradient-to-r from-red-500/20 to-orange-550/20 opacity-0 group-focus-within:opacity-100 transition-opacity duration-500 pointer-events-none z-0"></div>
 
-            <div className="flex flex-col sm:flex-row gap-4 relative z-10">
+            <div className="flex flex-col sm:flex-row gap-3.5 relative z-10">
               <div className="relative flex-1">
-                <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-                  <LinkIcon className="h-5 w-5 text-violet-400" />
+                <div className="absolute inset-y-0 left-4.5 flex items-center pointer-events-none">
+                  <LinkIcon className="h-5 w-5 text-red-500" />
                 </div>
                 <input
                   type="text"
-                  className="w-full pl-12 pr-10 py-4 bg-slate-950/80 border border-slate-800 rounded-2xl focus:ring-2 focus:ring-violet-500/50 focus:border-transparent outline-none transition-all text-white placeholder-slate-500 font-medium"
+                  className="w-full pl-12 pr-12 py-4 bg-neutral-950/80 border border-red-500/15 focus:border-orange-500/40 rounded-2xl focus:ring-2 focus:ring-red-500/15 outline-none transition-all duration-300 text-white placeholder-neutral-600 font-medium text-sm"
                   placeholder="Paste video or audio link here..."
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
@@ -199,25 +211,25 @@ function AppVercel({ onSwitch }) {
                 {url && (
                   <button
                     onClick={clearSearch}
-                    className="absolute inset-y-0 right-3 flex items-center text-slate-500 hover:text-white transition-colors"
+                    className="absolute inset-y-0 right-3.5 flex items-center text-slate-500 hover:text-red-400 transition-colors"
                   >
-                    <X className="w-5 h-5 bg-slate-800 hover:bg-slate-700 rounded-full p-1" />
+                    <X className="w-5 h-5 bg-neutral-900 hover:bg-neutral-800 rounded-full p-1 border border-red-500/10" />
                   </button>
                 )}
               </div>
               <button
                 onClick={fetchInfo}
                 disabled={loading || !url}
-                className="py-4 px-8 bg-gradient-to-r from-violet-500 to-cyan-600 hover:from-violet-400 hover:to-cyan-500 disabled:from-slate-800 disabled:to-slate-900 rounded-2xl font-bold transition-all duration-300 flex items-center justify-center min-w-[140px] shadow-lg shadow-violet-500/10 hover:shadow-violet-400/25 disabled:shadow-none hover:scale-[1.01] active:scale-95 disabled:text-slate-500"
+                className="py-4 px-8 bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 disabled:from-neutral-900 disabled:to-neutral-950 text-white font-extrabold rounded-2xl transition-all duration-300 flex items-center justify-center min-w-[140px] shadow-[0_0_20px_rgba(239,68,68,0.2)] hover:shadow-[0_0_30px_rgba(249,115,22,0.35)] disabled:shadow-none hover:scale-[1.02] active:scale-95 disabled:text-neutral-500 cursor-pointer"
               >
                 {loading ? (
                   <>
                     <Loader2 className="animate-spin mr-2 h-5 w-5" />
-                    <span>Querying Vercel...</span>
+                    <span>Querying...</span>
                   </>
                 ) : (
                   <>
-                    <Sparkles className="mr-2 h-5 w-5 text-yellow-300" />
+                    <Sparkles className="mr-2 h-4.5 w-4.5 text-yellow-300" />
                     <span>Analyze</span>
                   </>
                 )}
@@ -228,28 +240,28 @@ function AppVercel({ onSwitch }) {
 
         {/* Errors */}
         {error && (
-          <div className="w-full max-w-3xl bg-red-950/20 border border-red-500/30 text-red-200 p-5 rounded-2xl mb-8 shadow-xl backdrop-blur-md animate-fade-in flex items-start gap-3">
+          <div className="w-full max-w-3xl bg-red-950/10 border border-red-500/30 text-red-200 p-5 rounded-3xl mb-8 shadow-[0_0_20px_rgba(239,68,68,0.1)] backdrop-blur-md animate-fade-in flex items-start gap-3.5">
             <AlertTriangle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="font-semibold text-red-300">Vercel API Error</p>
-              <p className="text-sm text-red-400 mt-1">{error}</p>
+              <p className="font-bold text-red-300 text-sm">Vercel API Gateway Blocked</p>
+              <p className="text-xs text-red-400 mt-1 font-light leading-relaxed">{error}</p>
             </div>
           </div>
         )}
 
         {/* Media Preview & Formats Card */}
         {videoInfo && (
-          <div className="w-full bg-slate-900/40 border border-slate-800/80 rounded-3xl overflow-hidden shadow-2xl backdrop-blur-xl animate-fade-in mb-12">
+          <div className="w-full bg-[#0d0202]/40 border border-red-500/10 rounded-3xl overflow-hidden shadow-2xl backdrop-blur-2xl animate-fade-in mb-12">
             <div className="lg:flex">
               {/* Left Column: Preview */}
-              <div className="lg:w-5/12 bg-slate-950/40 border-b lg:border-b-0 lg:border-r border-slate-800 flex flex-col justify-center relative min-h-[300px] p-6">
-                <div className="relative aspect-video rounded-2xl overflow-hidden bg-black/60 shadow-lg group">
+              <div className="lg:w-5/12 bg-neutral-950/40 border-b lg:border-b-0 lg:border-r border-red-500/10 flex flex-col justify-center relative min-h-[320px] p-6">
+                <div className="relative aspect-video rounded-2xl overflow-hidden bg-black/60 shadow-xl group border border-red-500/10">
                   {isPlaying ? (
                     <div className="w-full h-full flex items-center justify-center bg-black relative">
                       {streamLoading ? (
                         <div className="flex flex-col items-center gap-2 text-center p-4">
-                          <Loader2 className="animate-spin text-violet-400 w-8 h-8" />
-                          <p className="text-xs text-slate-400 font-semibold tracking-wider uppercase">Constructing preview stream...</p>
+                          <Loader2 className="animate-spin text-red-500 w-8 h-8" />
+                          <p className="text-xs text-neutral-400 font-semibold tracking-wider uppercase mt-2">Opening stream channel...</p>
                         </div>
                       ) : streamUrl ? (
                         <video
@@ -261,7 +273,7 @@ function AppVercel({ onSwitch }) {
                       ) : null}
                       <button
                         onClick={() => setIsPlaying(false)}
-                        className="absolute top-3 right-3 bg-black/70 hover:bg-black/90 p-2 rounded-full text-white transition-all backdrop-blur-sm border border-white/10 z-20"
+                        className="absolute top-3 right-3 bg-black/70 hover:bg-neutral-850 p-2 rounded-full text-white transition-all backdrop-blur-sm border border-white/10 z-20 cursor-pointer"
                         title="Close Player"
                       >
                         <X className="w-4 h-4" />
@@ -274,13 +286,13 @@ function AppVercel({ onSwitch }) {
                         alt={videoInfo.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                       />
-                      <div className="absolute inset-0 bg-slate-950/40 group-hover:bg-slate-950/20 transition-colors duration-300"></div>
+                      <div className="absolute inset-0 bg-neutral-950/40 group-hover:bg-neutral-950/20 transition-colors duration-300"></div>
                       <div className="absolute inset-0 flex items-center justify-center">
                         <button
                           onClick={handlePlayStream}
-                          className="bg-violet-500 hover:bg-violet-400 text-white hover:scale-110 active:scale-95 shadow-xl shadow-violet-500/20 p-4 rounded-full transition-all duration-300 flex items-center justify-center group-hover:shadow-violet-400/40"
+                          className="bg-red-600 hover:bg-red-500 text-white hover:scale-110 active:scale-95 shadow-[0_0_20px_rgba(239,68,68,0.3)] p-4 rounded-full transition-all duration-300 flex items-center justify-center group-hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] cursor-pointer"
                         >
-                          <Play className="w-8 h-8 fill-current translate-x-[2px]" />
+                          <Play className="w-7 h-7 fill-current translate-x-[2px]" />
                         </button>
                       </div>
                     </>
@@ -288,31 +300,31 @@ function AppVercel({ onSwitch }) {
                 </div>
 
                 {streamError && (
-                  <div className="mt-3 p-3 bg-red-950/30 border border-red-500/20 text-red-400 rounded-xl text-xs flex items-center gap-2">
+                  <div className="mt-3 p-3.5 bg-red-950/20 border border-red-500/20 text-red-400 rounded-xl text-xs flex items-center gap-2 font-light">
                     <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0" />
                     <span>{streamError}</span>
                   </div>
                 )}
 
-                <div className="mt-5 space-y-3">
+                <div className="mt-5 space-y-3.5">
                   <div className="flex items-center justify-between">
-                    <span className="px-3 py-1 bg-gradient-to-r from-violet-500/10 to-indigo-500/10 border border-violet-500/20 rounded-full text-[10px] font-bold uppercase tracking-wider text-violet-400">
+                    <span className="px-3.5 py-1 bg-gradient-to-r from-red-600/10 to-orange-600/10 border border-red-500/25 rounded-full text-[10px] font-extrabold uppercase tracking-widest text-red-400 shadow-[0_0_10px_rgba(239,68,68,0.08)]">
                       {videoInfo.source}
                     </span>
                     <button
                       onClick={handlePlayStream}
-                      className="text-xs text-slate-400 hover:text-violet-400 transition-colors flex items-center gap-1 font-medium"
+                      className="text-xs text-slate-400 hover:text-red-400 transition-colors flex items-center gap-1.5 font-bold cursor-pointer"
                     >
-                      <PlayCircle className="w-3.5 h-3.5" />
+                      <PlayCircle className="w-4 h-4 text-red-550" />
                       <span>Play Preview Mode</span>
                     </button>
                   </div>
 
-                  <h2 className="text-xl font-bold tracking-tight text-slate-100 leading-snug line-clamp-3">
+                  <h2 className="text-lg font-bold tracking-tight text-slate-100 leading-snug line-clamp-3">
                     {videoInfo.title}
                   </h2>
-                  <p className="text-sm text-slate-400 font-medium">
-                    Creator: <span className="text-slate-300">{videoInfo.author}</span>
+                  <p className="text-xs text-slate-400">
+                    Creator: <span className="text-slate-300 font-semibold">{videoInfo.author}</span>
                   </p>
                 </div>
               </div>
@@ -320,23 +332,25 @@ function AppVercel({ onSwitch }) {
               {/* Right Column: Formats list fetched from Vercel */}
               <div className="lg:w-7/12 p-6 md:p-8 flex flex-col justify-between">
                 <div>
-                  <div className="flex border-b border-slate-800 mb-6 gap-2">
+                  <div className="flex border-b border-red-500/10 mb-6 gap-2">
                     <button
                       onClick={() => setActiveTab('video')}
-                      className={`pb-3 px-4 text-sm font-semibold border-b-2 transition-all flex items-center gap-2 ${activeTab === 'video'
-                        ? 'border-violet-400 text-violet-400'
-                        : 'border-transparent text-slate-400 hover:text-slate-200'
-                        }`}
+                      className={`pb-3 px-4 text-sm font-bold border-b-2 transition-all flex items-center gap-2 cursor-pointer ${
+                        activeTab === 'video'
+                          ? 'border-red-500 text-red-450 drop-shadow-[0_0_8px_rgba(239,68,68,0.15)]'
+                          : 'border-transparent text-neutral-400 hover:text-neutral-200'
+                      }`}
                     >
                       <Video className="w-4 h-4" />
                       <span>Video Presets</span>
                     </button>
                     <button
                       onClick={() => setActiveTab('audio')}
-                      className={`pb-3 px-4 text-sm font-semibold border-b-2 transition-all flex items-center gap-2 ${activeTab === 'audio'
-                        ? 'border-indigo-400 text-indigo-400'
-                        : 'border-transparent text-slate-400 hover:text-slate-200'
-                        }`}
+                      className={`pb-3 px-4 text-sm font-bold border-b-2 transition-all flex items-center gap-2 cursor-pointer ${
+                        activeTab === 'audio'
+                          ? 'border-orange-500 text-orange-450 drop-shadow-[0_0_8px_rgba(249,115,22,0.15)]'
+                          : 'border-transparent text-neutral-400 hover:text-neutral-200'
+                      }`}
                     >
                       <Music className="w-4 h-4" />
                       <span>Audio Presets</span>
@@ -344,19 +358,19 @@ function AppVercel({ onSwitch }) {
                   </div>
 
                   {activeTab === 'video' && (
-                    <div className="space-y-4">
+                    <div className="space-y-4 animate-fade-in">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {videoInfo.formats.filter(f => f.type === 'video').map((item) => (
                           <button
                             key={item.format_id}
                             onClick={() => handleDownload(item.format_id)}
-                            className="flex items-center justify-between p-4 bg-slate-950/60 hover:bg-slate-900 border border-slate-800 hover:border-violet-500/40 rounded-2xl text-left transition-all duration-300 group hover:scale-[1.01]"
+                            className="flex items-center justify-between p-4 bg-neutral-950/60 hover:bg-red-950/20 border border-red-500/10 hover:border-red-550/40 rounded-2xl text-left transition-all duration-300 group hover:scale-[1.01] cursor-pointer"
                           >
                             <div>
-                              <p className="font-semibold text-slate-200 text-sm group-hover:text-violet-300 transition-colors">{item.quality}</p>
-                              <span className="text-[10px] text-slate-500">Container: {item.container}</span>
+                              <p className="font-bold text-slate-200 text-sm group-hover:text-red-400 transition-colors">{item.quality}</p>
+                              <span className="text-[10px] text-neutral-500">Container: {item.container}</span>
                             </div>
-                            <Download className="w-5 h-5 text-slate-500 group-hover:text-violet-400 transition-colors" />
+                            <Download className="w-5 h-5 text-slate-500 group-hover:text-red-500 transition-colors" />
                           </button>
                         ))}
                       </div>
@@ -364,19 +378,19 @@ function AppVercel({ onSwitch }) {
                   )}
 
                   {activeTab === 'audio' && (
-                    <div className="space-y-4">
+                    <div className="space-y-4 animate-fade-in">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {videoInfo.formats.filter(f => f.type === 'audio').map((item) => (
                           <button
                             key={item.format_id}
                             onClick={() => handleDownload(item.format_id)}
-                            className="flex items-center justify-between p-4 bg-slate-950/60 hover:bg-slate-900 border border-slate-800 hover:border-indigo-500/40 rounded-2xl text-left transition-all duration-300 group hover:scale-[1.01]"
+                            className="flex items-center justify-between p-4 bg-neutral-950/60 hover:bg-red-950/20 border border-red-500/10 hover:border-orange-550/40 rounded-2xl text-left transition-all duration-300 group hover:scale-[1.01] cursor-pointer"
                           >
                             <div>
-                              <p className="font-semibold text-slate-200 text-sm group-hover:text-indigo-300 transition-colors">{item.quality}</p>
-                              <span className="text-[10px] text-slate-500">Format: {item.container}</span>
+                              <p className="font-bold text-slate-200 text-sm group-hover:text-orange-400 transition-colors">{item.quality}</p>
+                              <span className="text-[10px] text-neutral-500">Format: {item.container}</span>
                             </div>
-                            <Download className="w-5 h-5 text-slate-500 group-hover:text-indigo-400 transition-colors" />
+                            <Download className="w-5 h-5 text-slate-500 group-hover:text-orange-500 transition-colors" />
                           </button>
                         ))}
                       </div>
@@ -384,9 +398,9 @@ function AppVercel({ onSwitch }) {
                   )}
                 </div>
 
-                <div className="mt-8 pt-6 border-t border-slate-800/80 flex items-center gap-2 text-xs text-slate-500">
-                  <Shield className="w-4 h-4 text-emerald-500/70" />
-                  <span>Downloads are proxied safely via server redirects.</span>
+                <div className="mt-8 pt-6 border-t border-red-500/10 flex items-center gap-2 text-[11px] text-slate-500">
+                  <Shield className="w-4 h-4 text-emerald-500/75 drop-shadow-[0_0_6px_rgba(16,185,129,0.2)]" />
+                  <span className="font-light">Downloads are proxied safely via server redirection.</span>
                 </div>
               </div>
             </div>
@@ -395,30 +409,31 @@ function AppVercel({ onSwitch }) {
 
         {/* Feature Grid / Default View */}
         {!videoInfo && !loading && !error && (
-          <div className="w-full mt-10 animate-fade-in">
+          <div className="w-full mt-8 animate-fade-in">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-              <div className="bg-slate-900/40 border border-slate-850 p-6 rounded-2xl backdrop-blur-md hover:border-slate-800 transition-all duration-300">
-                <div className="w-10 h-10 bg-violet-500/10 border border-violet-500/20 text-violet-400 rounded-xl flex items-center justify-center mb-4">
+              
+              <div className="bg-[#0e0202]/40 border border-red-500/10 p-6 rounded-3xl backdrop-blur-md hover:border-orange-500/25 hover:shadow-[0_0_30px_rgba(239,68,68,0.04)] hover:-translate-y-1 transition-all duration-500">
+                <div className="w-10 h-10 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl flex items-center justify-center mb-4.5 shadow-[0_0_10px_rgba(239,68,68,0.1)]">
                   <Compass className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-slate-200 mb-2">Vercel Backend</h3>
-                <p className="text-sm text-slate-400">Powered by serverless routes to fetch clean oEmbed and Cobalt redirection targets.</p>
+                <h3 className="font-extrabold text-slate-200 mb-2 text-sm tracking-wide uppercase">Vercel Backend</h3>
+                <p className="text-xs text-slate-400 font-light leading-relaxed">Powered by serverless routes to fetch clean oEmbed and Cobalt redirection targets.</p>
               </div>
 
-              <div className="bg-slate-900/40 border border-slate-850 p-6 rounded-2xl backdrop-blur-md hover:border-slate-800 transition-all duration-300">
-                <div className="w-10 h-10 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 rounded-xl flex items-center justify-center mb-4">
+              <div className="bg-[#0e0202]/40 border border-red-500/10 p-6 rounded-3xl backdrop-blur-md hover:border-orange-500/25 hover:shadow-[0_0_30px_rgba(239,68,68,0.04)] hover:-translate-y-1 transition-all duration-500">
+                <div className="w-10 h-10 bg-orange-600/10 border border-orange-500/20 text-orange-400 rounded-xl flex items-center justify-center mb-4.5 shadow-[0_0_10px_rgba(249,115,22,0.1)]">
                   <Shield className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-slate-200 mb-2">Proxy Redirection</h3>
-                <p className="text-sm text-slate-400">Avoids 4.5MB payload size caps on Vercel by utilizing client-side download redirection tunnels.</p>
+                <h3 className="font-extrabold text-slate-200 mb-2 text-sm tracking-wide uppercase">Proxy Redirection</h3>
+                <p className="text-xs text-slate-400 font-light leading-relaxed">Avoids 4.5MB payload size caps on Vercel by utilizing client-side download redirection tunnels.</p>
               </div>
 
-              <div className="bg-slate-900/40 border border-slate-850 p-6 rounded-2xl backdrop-blur-md hover:border-slate-800 transition-all duration-300">
-                <div className="w-10 h-10 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded-xl flex items-center justify-center mb-4">
+              <div className="bg-[#0e0202]/40 border border-red-500/10 p-6 rounded-3xl backdrop-blur-md hover:border-orange-500/25 hover:shadow-[0_0_30px_rgba(239,68,68,0.04)] hover:-translate-y-1 transition-all duration-500">
+                <div className="w-10 h-10 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl flex items-center justify-center mb-4.5 shadow-[0_0_10px_rgba(239,68,68,0.1)]">
                   <Flame className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-slate-200 mb-2">Multi-Format Presets</h3>
-                <p className="text-sm text-slate-400">Supports standard video qualities up to 1080p and high bitrate MP3 audio extraction.</p>
+                <h3 className="font-extrabold text-slate-200 mb-2 text-sm tracking-wide uppercase">Multi-Format Presets</h3>
+                <p className="text-xs text-slate-400 font-light leading-relaxed">Supports standard video qualities up to 1080p and high bitrate MP3 audio extraction.</p>
               </div>
             </div>
           </div>
@@ -426,12 +441,12 @@ function AppVercel({ onSwitch }) {
       </div>
 
       {/* Footer */}
-      <footer className="mt-auto py-8 text-center text-slate-500 text-xs border-t border-slate-900/80 w-full max-w-5xl z-10">
-        <div className="flex items-center justify-center gap-2 mb-2 font-medium">
-          <CheckCircle2 className="w-3.5 h-3.5 text-violet-500/80" />
+      <footer className="mt-auto py-8 text-center text-slate-500 text-xs border-t border-red-500/5 w-full max-w-5xl z-10">
+        <div className="flex items-center justify-center gap-2 mb-2.5 font-bold text-red-450 drop-shadow-[0_0_6px_rgba(239,68,68,0.15)]">
+          <CheckCircle2 className="w-4 h-4 text-red-550" />
           <span>Powered by Vercel API Gateway</span>
         </div>
-        <p className="text-slate-600">&copy; 2026 Celestial Media Hub. Hosted serverless, crafted with cosmic energy.</p>
+        <p className="text-slate-600 font-light">&copy; 2026 Celestial Media Hub. Hosted serverless, crafted with cosmic energy.</p>
       </footer>
     </div>
   );
