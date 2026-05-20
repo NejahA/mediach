@@ -139,31 +139,206 @@ app.get('/info', async (req, res) => {
   }
 });
 
-// Endpoint to download (Redirects to Cobalt CDN to bypass Vercel 4.5MB payload limit)
-app.get('/download', async (req, res) => {
+// Endpoint to download (Serves a client-side download bridge page to bypass Cobalt IP-locking and Vercel size caps)
+app.get('/download', (req, res) => {
   const { url, format_id } = req.query;
   if (!url) {
     return res.status(400).json({ error: 'URL is required' });
   }
 
-  try {
-    const isAudio = format_id === 'mp3' || format_id === 'm4a' || format_id === 'wav';
-    const options = isAudio 
-      ? { isAudioOnly: true, aFormat: format_id || 'mp3' } 
-      : { vQuality: format_id || '720', isAudioOnly: false };
-
-    const data = await fetchFromCobalt(url, options);
-
-    if (data.status === 'redirect' || data.status === 'tunnel') {
-      console.log(`Redirecting download for ${url} to ${data.url}`);
-      return res.redirect(data.url);
-    } else {
-      return res.status(500).json({ error: 'Download mirror returned invalid response' });
+  res.send(`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preparing Download - Mediach</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #020617;
+      color: #f8fafc;
+      font-family: system-ui, -apple-system, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
     }
-  } catch (error) {
-    console.error('Download error:', error.message);
-    res.status(500).json({ error: 'Failed to process download link' });
-  }
+    .container {
+      text-align: center;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(51, 65, 85, 0.5);
+      padding: 2.5rem;
+      border-radius: 1.5rem;
+      backdrop-filter: blur(16px);
+      max-width: 420px;
+      width: 90%;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      position: relative;
+      z-index: 10;
+    }
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(139, 92, 246, 0.1);
+      border-left-color: #8b5cf6;
+      border-radius: 50%;
+      margin: 0 auto 1.5rem;
+      animation: spin 1s linear infinite;
+    }
+    h2 {
+      margin: 0 0 0.5rem;
+      font-size: 1.6rem;
+      font-weight: 800;
+      background: linear-gradient(to right, #a78bfa, #22d3ee);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.025em;
+    }
+    p {
+      color: #94a3b8;
+      font-size: 0.95rem;
+      margin: 0 0 1.25rem;
+      line-height: 1.5;
+    }
+    .status {
+      font-size: 0.8rem;
+      color: #64748b;
+      font-family: monospace;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 0.75rem;
+      border-radius: 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      word-break: break-all;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .glow {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, transparent 70%);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      filter: blur(40px);
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="glow"></div>
+  <div class="container">
+    <div class="spinner" id="spinner"></div>
+    <h2 id="title">Securing Tunnel</h2>
+    <p id="desc">Establishing direct connection to Celestial download mirrors from your device...</p>
+    <div class="status" id="status">Initializing handshake...</div>
+  </div>
+
+  <script>
+    const targetUrl = ${JSON.stringify(url)};
+    const formatId = ${JSON.stringify(format_id)};
+    
+    const COBALT_INSTANCES = [
+      'https://cobaltapi.squair.xyz',
+      'https://fox.kittycat.boo',
+      'https://dog.kittycat.boo',
+      'https://api.dl.woof.monster',
+      'https://cobaltapi.kittycat.boo'
+    ];
+
+    async function startDownload() {
+      const statusEl = document.getElementById('status');
+      const titleEl = document.getElementById('title');
+      const descEl = document.getElementById('desc');
+      const spinnerEl = document.getElementById('spinner');
+
+      const isAudio = formatId === 'mp3' || formatId === 'm4a' || formatId === 'wav';
+      const requestBody = {
+        url: targetUrl,
+        downloadMode: isAudio ? 'audio' : 'auto',
+        ...(isAudio ? {
+          audioFormat: formatId === 'm4a' ? 'best' : (formatId || 'mp3'),
+          audioBitrate: '320'
+        } : {
+          videoQuality: formatId || '720'
+        })
+      };
+
+      let instances = [...COBALT_INSTANCES];
+      try {
+        statusEl.innerText = 'Resolving global active mirrors...';
+        const directoryRes = await fetch('https://cobalt.directory/api/working?type=api');
+        const dirData = await directoryRes.json();
+        if (dirData && dirData.data) {
+          const ytApis = dirData.data.youtube || [];
+          const scApis = dirData.data.soundcloud || [];
+          const merged = Array.from(new Set([...ytApis, ...scApis, ...COBALT_INSTANCES]));
+          if (merged.length > 0) {
+            instances = merged;
+          }
+        }
+      } catch(e) {
+        console.warn('Failed to load online mirrors, using defaults');
+      }
+
+      let lastError = 'No responsive mirrors found';
+      for (const instance of instances) {
+        try {
+          const hostname = new URL(instance).hostname;
+          statusEl.innerText = 'Querying mirror: ' + hostname;
+          
+          const response = await fetch(instance + '/', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+          });
+
+          if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            lastError = errData.error?.code || 'HTTP ' + response.status;
+            continue;
+          }
+
+          const data = await response.json();
+          if (data && data.url) {
+            statusEl.innerText = 'Tunnel resolved via ' + hostname;
+            titleEl.innerText = 'Download Initialized';
+            descEl.innerText = 'Your media download has started. You can now close this tab.';
+            spinnerEl.style.display = 'none';
+
+            // Trigger file download
+            const a = document.createElement('a');
+            a.href = data.url;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            return;
+          } else {
+            lastError = data.error?.code || 'Invalid response from mirror';
+          }
+        } catch (err) {
+          lastError = err.message;
+        }
+      }
+
+      titleEl.innerText = 'Tunnel Resolution Failed';
+      descEl.innerText = 'Unable to establish download session through the mirror pipelines.';
+      statusEl.innerText = 'Error details: ' + lastError;
+      spinnerEl.style.borderLeftColor = '#ef4444';
+      spinnerEl.style.animation = 'none';
+    }
+
+    window.onload = startDownload;
+  </script>
+</body>
+</html>`);
 });
 
 // Endpoint to stream (Redirects to Cobalt CDN to avoid proxying through Vercel)

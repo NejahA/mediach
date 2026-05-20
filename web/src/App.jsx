@@ -17,7 +17,7 @@ const DEFAULT_COBALT_INSTANCES = [
   'https://api.cobalt.tools'
 ];
 
-function App() {
+function App({ onSwitch }) {
   const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
   const [videoInfo, setVideoInfo] = useState(null);
@@ -277,6 +277,20 @@ function App() {
       {/* Main Container */}
       <div className="w-full max-w-5xl flex-grow flex flex-col items-center relative z-10">
         
+        {/* Toggle Version Banner */}
+        <div className="w-full flex justify-between items-center mb-6">
+          <div className="flex items-center gap-2">
+            <Globe className="w-4 h-4 text-cyan-400" />
+            <span className="text-xs font-semibold text-slate-400">Celestial Direct Mode</span>
+          </div>
+          <button 
+            onClick={onSwitch}
+            className="px-3.5 py-1.5 bg-violet-500/10 hover:bg-violet-500/20 text-violet-400 border border-violet-500/30 rounded-xl text-xs font-bold transition-all hover:scale-105 active:scale-95"
+          >
+            Switch to Vercel API Gateway &rarr;
+          </button>
+        </div>
+
         {/* Header */}
         <header className="mb-10 text-center w-full mt-4 flex flex-col items-center">
           <div className="inline-flex items-center gap-3 px-4 py-2 bg-white/5 border border-white/10 rounded-full backdrop-blur-md mb-4 animate-fade-in">

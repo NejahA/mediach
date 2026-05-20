@@ -16,13 +16,10 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@distube/ytdl-core": "^4.16.12",
     "axios": "^1.16.1",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
-    "express": "^5.2.1",
-    "youtube-dl-exec": "^3.1.7",
-    "ytsr": "^3.8.4"
+    "express": "^5.2.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
