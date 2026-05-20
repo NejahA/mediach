@@ -1,15 +1,9 @@
 const express = require('express');
-
 const cors = require('cors');
-const youtubedl = require('youtube-dl-exec');
 const axios = require('axios');
-const { spawn } = require('child_process');
-const path = require('path');
 require('dotenv').config();
 
-const YTDLP_PATH = path.join(__dirname, 'node_modules', 'youtube-dl-exec', 'bin', 'yt-dlp.exe');
-
-console.log('Starting mediach API...');
+console.log('Starting serverless-safe mediach API...');
 
 const app = express();
 const PORT = process.env.PORT || 5002;
@@ -17,105 +11,135 @@ const PORT = process.env.PORT || 5002;
 app.use(cors());
 app.use(express.json());
 
-process.on('uncaughtException', (err) => {
-  console.error('Uncaught Exception:', err);
-});
+// List of fallback Cobalt API instances
+const COBALT_INSTANCES = [
+  'https://nuko-c.meowing.de',
+  'https://cobaltapi.squair.xyz',
+  'https://fox.kittycat.boo',
+  'https://dog.kittycat.boo',
+  'https://api.dl.woof.monster',
+  'https://cobaltapi.kittycat.boo',
+  'https://api.qwkuns.me',
+  'https://api.cobalt.tools'
+];
 
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-});
+// Helper to make a Cobalt request with fallbacks
+async function fetchFromCobalt(url, options = {}) {
+  let lastError = null;
+  const isAudio = !!options.isAudioOnly;
+  const requestBody = {
+    url,
+    downloadMode: isAudio ? 'audio' : 'auto',
+    ...(isAudio ? {
+      audioFormat: options.aFormat === 'm4a' ? 'best' : (options.aFormat || 'mp3'),
+      audioBitrate: '320'
+    } : {
+      videoQuality: options.vQuality || '720'
+    })
+  };
 
-// Basic endpoint to check if server is running
+  for (const instance of COBALT_INSTANCES) {
+    try {
+      const response = await axios.post(`${instance}/`, requestBody, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        timeout: 10000
+      });
+
+      if (response.data && response.data.status !== 'error') {
+        return response.data;
+      } else {
+        lastError = response.data?.error?.code || 'Error response';
+      }
+    } catch (err) {
+      lastError = err.message;
+    }
+  }
+  throw new Error(`All download mirrors failed. Reason: ${lastError}`);
+}
+
+// Basic endpoint
 app.get('/', (req, res) => {
-  res.send('mediach API is running');
+  res.send('mediach Serverless API is running');
 });
 
-// Endpoint to get video info
+// Endpoint to get video info (Vercel-compatible oEmbed)
 app.get('/info', async (req, res) => {
   const { url } = req.query;
   if (!url) {
     return res.status(400).json({ error: 'URL is required' });
   }
 
-  let cleanUrl = url;
   const isYouTube = url.includes('youtube.com') || url.includes('youtu.be');
   const isDailymotion = url.includes('dailymotion.com') || url.includes('dai.ly');
+  const isVimeo = url.includes('vimeo.com');
+  const isSoundCloud = url.includes('soundcloud.com');
+  const isTikTok = url.includes('tiktok.com');
 
-  if (!isYouTube && !isDailymotion) {
-    return res.status(400).json({ error: 'Only YouTube and Dailymotion links are supported.' });
+  let oembedUrl = '';
+  let source = 'Online Media';
+
+  if (isYouTube) {
+    oembedUrl = `https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`;
+    source = 'YouTube';
+  } else if (isDailymotion) {
+    oembedUrl = `https://www.dailymotion.com/services/oembed?url=${encodeURIComponent(url)}&format=json`;
+    source = 'Dailymotion';
+  } else if (isVimeo) {
+    oembedUrl = `https://vimeo.com/api/oembed.json?url=${encodeURIComponent(url)}`;
+    source = 'Vimeo';
+  } else if (isTikTok) {
+    oembedUrl = `https://www.tiktok.com/oembed?url=${encodeURIComponent(url)}`;
+    source = 'TikTok';
+  } else if (isSoundCloud) {
+    oembedUrl = `https://soundcloud.com/oembed?url=${encodeURIComponent(url)}&format=json`;
+    source = 'SoundCloud';
   }
 
-  if (isYouTube && cleanUrl.includes('v=')) {
-    try {
-      const match = cleanUrl.match(/[?&]v=([^&]+)/);
-      if (match && match[1]) {
-        cleanUrl = `https://www.youtube.com/watch?v=${match[1]}`;
-      }
-    } catch (e) {}
-  }
+  try {
+    let title = 'Celestial Media File';
+    let author = 'Unknown Space Explorer';
+    let thumbnail = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop';
 
-  console.log('--- INFO REQUEST ---');
-  console.log('URL:', cleanUrl);
-
-  let outputData = '';
-  let errorData = '';
-
-  const ytProcess = spawn(YTDLP_PATH, [
-    cleanUrl,
-    '--dump-single-json',
-    '--no-playlist',
-    '--no-warnings',
-    '--no-check-certificate',
-    '--no-check-formats',
-    '--flat-playlist'
-  ]);
-
-  const timeoutId = setTimeout(() => {
-    ytProcess.kill();
-  }, 30000);
-
-  ytProcess.stdout.on('data', (data) => {
-    outputData += data.toString();
-  });
-
-  ytProcess.stderr.on('data', (data) => {
-    errorData += data.toString();
-  });
-
-  ytProcess.on('close', (code) => {
-    clearTimeout(timeoutId);
-    if (code === 0) {
+    if (oembedUrl) {
       try {
-        const output = JSON.parse(outputData);
-        console.log('Success:', output.title);
-        res.json({
-          title: output.title,
-          author: output.uploader || output.uploader_id || 'Unknown',
-          thumbnail: output.thumbnail,
-          duration: output.duration,
-          source: output.extractor_key,
-          formats: output.formats
-            .filter(f => f.vcodec !== 'none' && f.acodec !== 'none' && !f.url.includes('manifest') && !f.url.includes('m3u8'))
-            .map(f => ({
-              quality: f.format_note || f.resolution,
-              container: f.ext,
-              url: f.url,
-              filesize: f.filesize || f.filesize_approx,
-              format_id: f.format_id
-            }))
-        });
+        const response = await axios.get(oembedUrl, { timeout: 8000 });
+        title = response.data.title || title;
+        author = response.data.author_name || author;
+        thumbnail = response.data.thumbnail_url || thumbnail;
       } catch (e) {
-        console.error('Parse error:', e.message);
-        res.status(500).json({ error: 'Failed to parse video info' });
+        console.warn('oEmbed failed, sending generic metadata');
       }
     } else {
-      console.error('yt-dlp error:', errorData);
-      res.status(500).json({ error: 'Failed to fetch video info. It might be private or region-restricted.' });
+      try {
+        const urlObj = new URL(url);
+        source = urlObj.hostname.replace('www.', '');
+        source = source.charAt(0).toUpperCase() + source.slice(1);
+      } catch (e) {}
     }
-  });
+
+    res.json({
+      title,
+      author,
+      thumbnail,
+      source,
+      formats: [
+        { quality: '1080p Full HD', container: 'mp4', format_id: '1080', type: 'video' },
+        { quality: '720p HD', container: 'mp4', format_id: '720', type: 'video' },
+        { quality: '480p SD', container: 'mp4', format_id: '485', type: 'video' },
+        { quality: '360p Mobile', container: 'mp4', format_id: '360', type: 'video' },
+        { quality: 'MP3 Audio Only', container: 'mp3', format_id: 'mp3', type: 'audio' }
+      ]
+    });
+  } catch (error) {
+    console.error('Info fetching error:', error.message);
+    res.status(500).json({ error: 'Failed to retrieve media metadata' });
+  }
 });
 
-// Endpoint to download (proxy the stream)
+// Endpoint to download (Redirects to Cobalt CDN to bypass Vercel 4.5MB payload limit)
 app.get('/download', async (req, res) => {
   const { url, format_id } = req.query;
   if (!url) {
@@ -123,58 +147,26 @@ app.get('/download', async (req, res) => {
   }
 
   try {
-    console.log(`Starting download for ${url} with format ${format_id}`);
-    
-    // Get info first to get the title
-    const output = await youtubedl(url, {
-      dumpSingleJson: true,
-      noPlaylist: true,
-    });
+    const isAudio = format_id === 'mp3' || format_id === 'm4a' || format_id === 'wav';
+    const options = isAudio 
+      ? { isAudioOnly: true, aFormat: format_id || 'mp3' } 
+      : { vQuality: format_id || '720', isAudioOnly: false };
 
-    const title = output.title.replace(/[^\w\s]/gi, '');
-    const format = output.formats.find(f => f.format_id === format_id) || { ext: 'mp4' };
-    const extension = format.ext || 'mp4';
+    const data = await fetchFromCobalt(url, options);
 
-    res.header('Content-Disposition', `attachment; filename="${title}.${extension}"`);
-
-    // Use spawn to pipe yt-dlp stdout directly to res
-    const ytProcess = spawn(YTDLP_PATH, [
-      url,
-      '-f', format_id || 'best',
-      '-o', '-', // Output to stdout
-      '--no-playlist',
-      '--no-warnings',
-      '--no-check-certificate'
-    ]);
-
-    ytProcess.stdout.pipe(res);
-
-    ytProcess.stderr.on('data', (data) => {
-      // console.log(`yt-dlp stderr: ${data}`);
-    });
-
-    ytProcess.on('close', (code) => {
-      if (code !== 0) {
-        console.error(`yt-dlp process exited with code ${code}`);
-        if (!res.headersSent) {
-          res.status(500).json({ error: 'Failed to download video' });
-        }
-      }
-    });
-
-    req.on('close', () => {
-      ytProcess.kill();
-    });
-
-  } catch (error) {
-    console.error('Error downloading:', error.message);
-    if (!res.headersSent) {
-      res.status(500).json({ error: 'Failed to download video' });
+    if (data.status === 'redirect' || data.status === 'tunnel') {
+      console.log(`Redirecting download for ${url} to ${data.url}`);
+      return res.redirect(data.url);
+    } else {
+      return res.status(500).json({ error: 'Download mirror returned invalid response' });
     }
+  } catch (error) {
+    console.error('Download error:', error.message);
+    res.status(500).json({ error: 'Failed to process download link' });
   }
 });
 
-// Endpoint to stream media (proxy to bypass CORS and handle seeking)
+// Endpoint to stream (Redirects to Cobalt CDN to avoid proxying through Vercel)
 app.get('/stream', async (req, res) => {
   const { url } = req.query;
   if (!url) {
@@ -182,29 +174,23 @@ app.get('/stream', async (req, res) => {
   }
 
   try {
-    const headers = {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-    };
-
-    if (req.headers.range) {
-      headers['Range'] = req.headers.range;
-    }
-
-    const response = await axios({
-      method: 'get',
-      url: url,
-      headers: headers,
-      responseType: 'stream'
+    const data = await fetchFromCobalt(url, {
+      vQuality: '720',
+      isAudioOnly: false
     });
 
-    res.set(response.headers);
-    response.data.pipe(res);
+    if (data.status === 'redirect' || data.status === 'tunnel') {
+      console.log(`Redirecting stream for ${url} to ${data.url}`);
+      return res.redirect(data.url);
+    } else {
+      return res.status(500).json({ error: 'Stream mirror returned invalid response' });
+    }
   } catch (error) {
     console.error('Streaming error:', error.message);
-    res.status(500).json({ error: 'Failed to stream media' });
+    res.status(500).json({ error: 'Failed to initialize stream' });
   }
 });
 
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Vercel-compatible backend server is running on http://localhost:${PORT}`);
 });
