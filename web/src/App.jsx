@@ -306,7 +306,7 @@ function App({ onSwitch }) {
             <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-spin-slow" />
           </div>
           <h1 className="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-amber-300 via-slate-100 to-cyan-300 bg-clip-text text-transparent tracking-tight leading-none drop-shadow-[0_0_30px_rgba(251,191,36,0.12)]">
-            Mediach Cobalt
+            Achmed Cobalt
           </h1>
           <p className="text-slate-400 text-base md:text-lg font-light max-w-lg mx-auto tracking-wide leading-relaxed">
             Stream, play and download high-speed media from the heavens with zero ads.

@@ -6,7 +6,7 @@ import {
   Compass, Shield, Flame, PlayCircle, Server, Layers
 } from 'lucide-react';
 
-const VERCEL_API_BASE = 'https://mediach-one.vercel.app';
+const VERCEL_API_BASE = 'https://Achmed-one.vercel.app';
 
 const DEFAULT_COBALT_INSTANCES = [
   'https://cobaltapi.squair.xyz',
@@ -80,7 +80,7 @@ function AppVercel({ onSwitch }) {
     setIsPlaying(true);
     setStreamLoading(true);
     setStreamError('');
-    
+
     // Resolve dynamic active list of mirrors
     let instances = [...DEFAULT_COBALT_INSTANCES];
     try {
@@ -139,7 +139,7 @@ function AppVercel({ onSwitch }) {
 
   return (
     <div className="min-h-screen bg-[#050000] text-[#f8fafc] w-full p-4 md:p-8 flex flex-col items-center relative overflow-hidden">
-      
+
       {/* Hellish Animated Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         {/* Deep Crimson Pit Glow */}
@@ -148,7 +148,7 @@ function AppVercel({ onSwitch }) {
         <div className="absolute bottom-[-15%] right-[-10%] w-[60%] h-[60%] rounded-full bg-orange-600/10 blur-[150px] animate-pulse-ember"></div>
         {/* Dark Ash/Charcoal Smoke Area */}
         <div className="absolute top-[30%] right-[10%] w-[45%] h-[45%] rounded-full bg-neutral-950/50 blur-[120px]"></div>
-        
+
         {/* Floating Red-Orange Embers */}
         <div className="absolute inset-0 bg-[radial-gradient(1.5px_1.5px_at_80px_100px,#ef4444_100%,transparent_0),radial-gradient(2px_2px_at_200px_350px,#f97316_100%,transparent_0),radial-gradient(1px_1px_at_120px_20px,#ef4444_100%,transparent_0),radial-gradient(2.5px_2.5px_at_280px_180px,#ea580c_80%,transparent_0)] bg-[size:450px_450px] opacity-25 animate-stars-blink"></div>
 
@@ -181,7 +181,7 @@ function AppVercel({ onSwitch }) {
             <Server className="w-3.5 h-3.5 text-orange-500 animate-pulse" />
           </div>
           <h1 className="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-red-600 via-orange-400 to-red-500 bg-clip-text text-transparent tracking-tight leading-none drop-shadow-[0_0_30px_rgba(239,68,68,0.25)]">
-            Mediach Vercel
+            Achmed Vercel
           </h1>
           <p className="text-slate-400 text-base md:text-lg font-light max-w-lg mx-auto tracking-wide leading-relaxed">
             Media downloader powered by Vercel serverless functions and Cobalt redirection.
@@ -191,7 +191,7 @@ function AppVercel({ onSwitch }) {
         {/* Search Panel */}
         <div className="w-full max-w-3xl mb-8">
           <div className="bg-[#0e0202]/60 border border-red-500/10 rounded-3xl p-5 md:p-6 backdrop-blur-xl shadow-[0_0_50px_rgba(239,68,68,0.05)] relative group">
-            
+
             {/* Glowing border ring on focus */}
             <div className="absolute inset-[-1px] rounded-3xl bg-gradient-to-r from-red-500/20 to-orange-550/20 opacity-0 group-focus-within:opacity-100 transition-opacity duration-500 pointer-events-none z-0"></div>
 
@@ -335,22 +335,20 @@ function AppVercel({ onSwitch }) {
                   <div className="flex border-b border-red-500/10 mb-6 gap-2">
                     <button
                       onClick={() => setActiveTab('video')}
-                      className={`pb-3 px-4 text-sm font-bold border-b-2 transition-all flex items-center gap-2 cursor-pointer ${
-                        activeTab === 'video'
+                      className={`pb-3 px-4 text-sm font-bold border-b-2 transition-all flex items-center gap-2 cursor-pointer ${activeTab === 'video'
                           ? 'border-red-500 text-red-450 drop-shadow-[0_0_8px_rgba(239,68,68,0.15)]'
                           : 'border-transparent text-neutral-400 hover:text-neutral-200'
-                      }`}
+                        }`}
                     >
                       <Video className="w-4 h-4" />
                       <span>Video Presets</span>
                     </button>
                     <button
                       onClick={() => setActiveTab('audio')}
-                      className={`pb-3 px-4 text-sm font-bold border-b-2 transition-all flex items-center gap-2 cursor-pointer ${
-                        activeTab === 'audio'
+                      className={`pb-3 px-4 text-sm font-bold border-b-2 transition-all flex items-center gap-2 cursor-pointer ${activeTab === 'audio'
                           ? 'border-orange-500 text-orange-450 drop-shadow-[0_0_8px_rgba(249,115,22,0.15)]'
                           : 'border-transparent text-neutral-400 hover:text-neutral-200'
-                      }`}
+                        }`}
                     >
                       <Music className="w-4 h-4" />
                       <span>Audio Presets</span>
@@ -411,7 +409,7 @@ function AppVercel({ onSwitch }) {
         {!videoInfo && !loading && !error && (
           <div className="w-full mt-8 animate-fade-in">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-              
+
               <div className="bg-[#0e0202]/40 border border-red-500/10 p-6 rounded-3xl backdrop-blur-md hover:border-orange-500/25 hover:shadow-[0_0_30px_rgba(239,68,68,0.04)] hover:-translate-y-1 transition-all duration-500">
                 <div className="w-10 h-10 bg-red-500/10 border border-red-500/20 text-red-400 rounded-xl flex items-center justify-center mb-4.5 shadow-[0_0_10px_rgba(239,68,68,0.1)]">
                   <Compass className="w-5 h-5" />
